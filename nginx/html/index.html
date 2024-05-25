@@ -14,11 +14,14 @@
         <div id="map" style="height: 80vh"></div>
         <script>
             const path = location.href.replace('/index.html', '');
-            const vectortileUrl = `${path}/tiles/{z}/{x}/{y}.pbf`;
+            // const vectortileUrl = `${path}/tiles/{z}/{x}/{y}.pbf`;
+
             const map = new maplibregl.Map({
                 container: 'map',
-                center: [137.1, 36.5],
-                zoom: 4,
+                center: [136.0881, 35.2406],
+                zoom: 9,
+                customAttribution:
+                    '<a href="https://maps.gsi.go.jp/development/ichiran.html">地理院タイル</a>',
                 style: {
                     version: 8,
                     sources: {
@@ -28,16 +31,23 @@
                                 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                             ],
                             tileSize: 256,
-                            maxzoom: 19,
+                            maxzoom: 18,
                             attribution:
                                 '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
                         },
-                        admin: {
-                            type: 'vector',
-                            tiles: [vectortileUrl],
-                            maxzoom: 8,
-                            attribution:
-                                '<a href="https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-N03-v3_1.html">国土数値情報 - 行政区域データ</a>'
+                        lakebiwa: {
+                            type: 'image',
+                            url: './lakebiwa.jpg',
+                            coordinates: [
+                                [135.596438368833077, 35.5498836025608185],
+                                [136.5823028110609414, 35.5498836025608185],
+                                [136.5823028110609414, 34.9281476305997742],
+                                [135.596438368833077, 34.9281476305997742],
+                            ],
+                            // tiles: [vectortileUrl],
+                            // maxzoom: 8,
+                            // attribution:
+                            //     '<a href="https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-N03-v3_1.html">国土数値情報 - 行政区域データ</a>'
                         },
                     },
                     layers: [
@@ -47,32 +57,29 @@
                             type: 'raster',
                         },
                         {
-                            id: 'admin-layer',
-                            source: 'admin',
-                            'source-layer': 'admin',
-                            type: 'fill',
+                            id: 'lakebiwa-layer',
+                            source: 'lakebiwa',
+                            type: 'raster',
                             paint: {
-                                'fill-color': '#fa0',
-                                'fill-opacity': 0.5,
-                                'fill-outline-color': '#00f',
+                                'raster-opacity': 0.7,
                             },
                         },
                     ],
                 },
             });
 
-            map.on('click', (e) => {
-                const features = map.queryRenderedFeatures(e.point, {
-                    layers: ['admin-layer'],
-                });
-                if (features.length === 0) {
-                    return;
-                }
-                const feature = features[0];
-                alert(
-                    `${feature.properties.N03_007}: ${feature.properties.N03_001}${feature.properties.N03_004}`,
-                );
-            });
+            // map.on('click', (e) => {
+            //     const features = map.queryRenderedFeatures(e.point, {
+            //         layers: ['admin-layer'],
+            //     });
+            //     if (features.length === 0) {
+            //         return;
+            //     }
+            //     const feature = features[0];
+            //     alert(
+            //         `${feature.properties.N03_007}: ${feature.properties.N03_001}${feature.properties.N03_004}`,
+            //     );
+            // });
         </script>
     </body>
 </html>
